@@ -11,6 +11,10 @@ public class AgentManipulator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Debug.LogError("ASASA");
+            DebugDraw.Sphere(transform.position, 5, Color.red, 5);
+        }
     }
 }

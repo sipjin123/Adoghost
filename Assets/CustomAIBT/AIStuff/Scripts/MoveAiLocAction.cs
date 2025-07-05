@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using Debug = UnityEngine.Debug;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
+[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent] Targ:[Target]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
 public partial class MoveAiLocAction : Action
 {
     private NavMeshAgent agent;

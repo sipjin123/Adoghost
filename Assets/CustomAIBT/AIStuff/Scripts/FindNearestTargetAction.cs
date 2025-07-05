@@ -29,6 +29,13 @@ public partial class FindNearestTargetAction : Action
         {
             if (obj == null || obj == self) continue;
 
+            ICanBeKilled killable = obj.GetComponent<ICanBeKilled>();
+            if (killable == null)
+                continue;
+            
+            if (!killable.CanBeKilled())
+                continue;
+            
             float distance = Vector3.SqrMagnitude(obj.transform.position - self.transform.position);
             if (distance < minDistance)
             {
