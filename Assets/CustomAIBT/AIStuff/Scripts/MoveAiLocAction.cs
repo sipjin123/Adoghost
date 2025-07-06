@@ -47,11 +47,22 @@ public partial class MoveAiLocAction : Action
         }
 
         if (agent == null || !agent.hasPath || agent.pathPending)
-            return Status.Running;
+        {
+            //Debug.Log("MoveAiLocAction: Now Moving");
+            if (agent.pathPending)
+            {            
+                return Status.Running;
+            }
+            else
+            {
+                return Status.Failure;
+            }
+        }
 
         // Check if agent reached destination
         if (agent.remainingDistance <= StopThreshold && !agent.pathPending)
         {
+            Debug.Log("MoveAiLocAction: Finished!");
             return Status.Success;
         }
 

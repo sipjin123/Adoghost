@@ -16,5 +16,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         Debug.Log($"{gameObject.name} has been killed!");
         GetComponent<Renderer>().material = deadMaterial;
         health = 0;
+        float newScale = .25f;
+        transform.localScale = new Vector3(newScale, newScale, newScale);
     }
 }
