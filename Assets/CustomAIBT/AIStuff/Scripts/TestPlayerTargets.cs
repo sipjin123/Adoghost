@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
 {
@@ -6,6 +7,14 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     public int health = 100;
 
     public Material deadMaterial;
+    public Material carryMaterial;
+    public Material aliveMaterial;
+    public bool corpseCarried;
+    private void Start()
+    {
+        aliveMaterial = GetComponent<Renderer>().material;
+    }
+
     public bool CanBeKilled()
     {
         return !isInvincible && health > 0;
@@ -16,7 +25,28 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         Debug.Log($"{gameObject.name} has been killed!");
         GetComponent<Renderer>().material = deadMaterial;
         health = 0;
+    }
+
+    public void OnCarryCorpse(GameObject carrier)
+    {
         float newScale = .25f;
+        GetComponent<Renderer>().material = carryMaterial;
         transform.localScale = new Vector3(newScale, newScale, newScale);
+        transform.SetParent(carrier.transform);
+        corpseCarried = true;
+    }
+
+    public bool IsCorpseCarried()
+    {
+        return corpseCarried;
+    }
+
+    public void OnDropCorpse()
+    {
+        corpseCarried = false;
+        float newScale = 1;
+        GetComponent<Renderer>().material = health > 0 ? aliveMaterial : deadMaterial;
+        transform.localScale = new Vector3(newScale, newScale, newScale);
+        transform.SetParent(null);
     }
 }

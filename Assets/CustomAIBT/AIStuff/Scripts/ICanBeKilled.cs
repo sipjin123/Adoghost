@@ -1,4 +1,6 @@
-﻿public interface ICanBeKilled
+﻿using UnityEngine;
+
+public interface ICanBeKilled
 {
     /// <summary>
     /// Returns true if this unit can currently be killed.
@@ -9,4 +11,9 @@
     /// Optional: Called when the unit is marked as killed.
     /// </summary>
     void OnKilled();
+    
+    
+    void OnCarryCorpse(GameObject carrier);
+    bool IsCorpseCarried();
+    void OnDropCorpse();
 }

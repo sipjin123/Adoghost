@@ -9,4 +9,7 @@ public class CareTakerAI : MonoBehaviour
     
     [SerializeField]
     public AIBehaviorState RequiredState;
+
+    [SerializeField]
+    public GameObject CorpseZone;
 }
