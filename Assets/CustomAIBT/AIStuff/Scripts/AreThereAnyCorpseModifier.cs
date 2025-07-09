@@ -5,8 +5,9 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "FindNearestCorpse", story: "FindNearestCorpse [Self] [Target] [TagValue]", category: "Action", id: "26942e9800755a40b6a213d0c665022a")]
-public partial class FindNearestCorpseAction : Action
+[NodeDescription(name: "AreThereAnyCorpse", story: "AreThereAnyCorpse [Self] [Target] [TagValue]", category: "Flow",
+    id: "761206b501eb71cd528820355d7cd0df")]
+public partial class AreThereAnyCorpseModifier : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
     [SerializeReference] public BlackboardVariable<GameObject> Target;
@@ -22,9 +23,6 @@ public partial class FindNearestCorpseAction : Action
         if (taggedObjects == null || taggedObjects.Length == 0)
             return Status.Failure;
 
-        GameObject nearest = null;
-        float minDistance = float.MaxValue;
-
         foreach (var obj in taggedObjects)
         {
             if (obj == null || obj == self) continue;
@@ -32,26 +30,16 @@ public partial class FindNearestCorpseAction : Action
             ICanBeKilled killable = obj.GetComponent<ICanBeKilled>();
             if (killable == null)
                 continue;
-            
+
             if (killable.CanBeKilled())
                 continue;
-            
-            if (!killable.IsValidCorpse())
-                continue;
-            
-            float distance = Vector3.SqrMagnitude(obj.transform.position - self.transform.position);
-            if (distance < minDistance)
+
+            if (killable.IsValidCorpse())
             {
-                minDistance = distance;
-                nearest = obj;
+                return Status.Success;
             }
         }
 
-        if (nearest == null)
-            return Status.Failure;
-
-        Target.Value = nearest;
-        return Status.Success;
+        return Status.Failure;
     }
 }
-

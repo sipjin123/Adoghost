@@ -15,5 +15,6 @@ public interface ICanBeKilled
     
     void OnCarryCorpse(GameObject carrier);
     bool IsCorpseCarried();
+    bool IsValidCorpse();
     void OnDropCorpse();
 }

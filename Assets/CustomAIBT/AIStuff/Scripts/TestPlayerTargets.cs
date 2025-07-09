@@ -10,6 +10,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     public Material carryMaterial;
     public Material aliveMaterial;
     public bool corpseCarried;
+    public bool isCorpseWithinCorpseZone;
     private void Start()
     {
         aliveMaterial = GetComponent<Renderer>().material;
@@ -41,6 +42,11 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         return corpseCarried;
     }
 
+    public bool IsValidCorpse()
+    {
+        return !isCorpseWithinCorpseZone;
+    }
+
     public void OnDropCorpse()
     {
         corpseCarried = false;
@@ -48,5 +54,6 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         GetComponent<Renderer>().material = health > 0 ? aliveMaterial : deadMaterial;
         transform.localScale = new Vector3(newScale, newScale, newScale);
         transform.SetParent(null);
+        isCorpseWithinCorpseZone = true;
     }
 }

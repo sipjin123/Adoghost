@@ -43,7 +43,7 @@ namespace Unity.Behavior
                 }
 
                 ICanBeKilled killable = hit.GetComponent<ICanBeKilled>();
-                if (killable == null || killable.CanBeKilled() || killable.IsCorpseCarried())
+                if (killable == null || killable.CanBeKilled() || killable.IsCorpseCarried() || !killable.IsValidCorpse())
                     continue;
 
                 TargetRef.Value = hit.gameObject;
