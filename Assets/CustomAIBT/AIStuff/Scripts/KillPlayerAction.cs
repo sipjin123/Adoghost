@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CustomAIBT.Utilities;
 using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
@@ -56,8 +57,20 @@ public partial class KillPlayerAction : Action
 
         if (closestTarget != null)
         {
+            /*
+            // Instantly look at target
+            Vector3 directionToTarget = (closestTarget.transform.position - Self.Value.transform.position).normalized;
+            directionToTarget.y = 0; // Lock vertical rotation if needed
+            if (directionToTarget != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+                Self.Value.transform.rotation = lookRotation;
+            }*/
+            CustTransformUtils.FaceTarget(Self.Value.transform, closestTarget.transform);
+            
             Debug.LogError("Kill You: " + closestTarget.name);
             closestTarget.GetComponent<ICanBeKilled>()?.OnKilled();
+            Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Stab);
             PlayerList.Value.Add(closestTarget);
             return Status.Success;
         }

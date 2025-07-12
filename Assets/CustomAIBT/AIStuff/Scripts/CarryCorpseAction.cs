@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CustomAIBT.Utilities;
 using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
@@ -57,8 +58,11 @@ public partial class CarryCorpseAction : Action
 
         if (closestTarget != null)
         {
+            CustTransformUtils.FaceTarget(Self.Value.transform, closestTarget.transform);
+            
             Debug.LogError("Carry Corpse: " + closestTarget.name);
             closestTarget.GetComponent<ICanBeKilled>()?.OnCarryCorpse(Self);
+            Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Interact);
             HasCorpse.Value = true;
             PlayerList.Value.Add(closestTarget);
             return Status.Success;

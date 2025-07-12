@@ -49,6 +49,7 @@ public partial class DropCorpseAction : Action
             return Status.Failure;
 
         Target.Value = nearest;
+        Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Land);
         nearest.GetComponent<ICanBeKilled>().OnDropCorpse();
         HasCorpse.Value = false;
         return Status.Success;

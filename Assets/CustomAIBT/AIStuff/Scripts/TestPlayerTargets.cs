@@ -25,6 +25,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     {
         Debug.Log($"{gameObject.name} has been killed!");
         GetComponent<Renderer>().material = deadMaterial;
+        GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         health = 0;
     }
 
@@ -49,6 +50,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
 
     public void OnDropCorpse()
     {
+        GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         corpseCarried = false;
         float newScale = 1;
         GetComponent<Renderer>().material = health > 0 ? aliveMaterial : deadMaterial;
