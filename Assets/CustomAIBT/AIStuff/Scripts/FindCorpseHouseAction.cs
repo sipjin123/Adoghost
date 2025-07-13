@@ -19,7 +19,6 @@ public partial class FindCorpseHouseAction : Action
             return Status.Failure;
 
         TargetZone.Value = self.GetComponent<CareTakerAI>().CorpseZone;
-        Debug.Log("Found the House");
         
         DebugDraw.Sphere( self.GetComponent<CareTakerAI>().CorpseZone.transform.position, 1, Color.red, 3);
         return Status.Success;

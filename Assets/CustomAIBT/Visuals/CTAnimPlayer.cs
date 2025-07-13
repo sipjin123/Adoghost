@@ -40,7 +40,7 @@ public class CTAnimPlayer : MonoBehaviour
     public void PlayAnimation(CharacterAnimation AnimToPlay)
     {  
         animator.Play(ToAnimatorStateName(AnimToPlay));
-        Debug.Log("Playing anim: " + AnimToPlay);
+        //Debug.Log("Playing anim: " + AnimToPlay);
     }
     
     public static string ToAnimatorStateName(CharacterAnimation anim)

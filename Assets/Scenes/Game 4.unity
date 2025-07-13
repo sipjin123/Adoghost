@@ -2202,11 +2202,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1944599666668576351, guid: bdb4fefba34189244a1ae1734ebecd4d, type: 3}
       propertyPath: m_Speed
-      value: 15
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944599666668576351, guid: bdb4fefba34189244a1ae1734ebecd4d, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944599666668576351, guid: bdb4fefba34189244a1ae1734ebecd4d, type: 3}
+      propertyPath: m_Acceleration
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1944599666668576351, guid: bdb4fefba34189244a1ae1734ebecd4d, type: 3}
       propertyPath: m_AngularSpeed
-      value: 240
+      value: 720
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944599666668576351, guid: bdb4fefba34189244a1ae1734ebecd4d, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2972120627849550599, guid: bdb4fefba34189244a1ae1734ebecd4d, type: 3}
       propertyPath: m_LocalPosition.x

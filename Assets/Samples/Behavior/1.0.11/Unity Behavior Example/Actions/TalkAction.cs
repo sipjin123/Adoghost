@@ -10,7 +10,7 @@ namespace Unity.Behavior.Example
     [NodeDescription(
         name: "Talk",
         description: "Show text in world-space above the Agent with the Sentence for a specified Duration.",
-        story: "[Agent] says [Sentence]",
+        story: "[Agent] says [Sentence] [PrintLogs]",
         id: "c70ad05265db4a5a8623561f705aefab")]
     public partial class TalkAction : Action
     {
@@ -19,6 +19,7 @@ namespace Unity.Behavior.Example
 
         [Tooltip("The text to show over the GameObject.")]
         [SerializeReference] public BlackboardVariable<string> Sentence;
+        [SerializeReference] public BlackboardVariable<bool> PrintLogs = new BlackboardVariable<bool>(true);
 
         [Tooltip("The time in seconds for the text to show.")]
         [SerializeReference] public BlackboardVariable<float> Duration = new BlackboardVariable<float>(2.0f);
@@ -42,6 +43,8 @@ namespace Unity.Behavior.Example
                 m_TextMeshAsset = Resources.Load<GameObject>("TextMesh Speech Preset");
             }
             CreateTextObject(Sentence, Agent);
+            if (PrintLogs)
+            Debug.Log(Sentence.Value);
 
             // Animate the character.
             m_Animator = Agent.Value.GetComponent<Animator>();

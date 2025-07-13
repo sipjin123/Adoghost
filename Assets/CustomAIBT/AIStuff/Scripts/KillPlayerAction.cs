@@ -7,13 +7,14 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "KillPlayer", story: "[Self] KillPlayer: Dead [PlayerList] ATKRange: [DetectionRadius] [HeightTolerance]", category: "Action", id: "f9992355888ed3e1aca85554e107cc01")]
+[NodeDescription(name: "KillPlayer", story: "[Self] KillPlayer: Dead [PlayerList] ATKRange: [DetectionRadius] [HeightTolerance] [PrintLogs]", category: "Action", id: "f9992355888ed3e1aca85554e107cc01")]
 public partial class KillPlayerAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
     [SerializeReference] public BlackboardVariable<List<GameObject>> PlayerList; // Active players
     [SerializeReference] public BlackboardVariable<float> DetectionRadius;
     [SerializeReference] public BlackboardVariable<float> HeightTolerance;
+    [SerializeReference] public BlackboardVariable<bool> PrintLogs = new BlackboardVariable<bool>(true);
     protected override Status OnUpdate()
     {
         if (Self?.Value == null || PlayerList?.Value == null || DetectionRadius == null)
@@ -27,6 +28,8 @@ public partial class KillPlayerAction : Action
         float closestDistanceSqr = float.MaxValue;
 
         DebugDraw.Sphere(origin, DetectionRadius, Color.red, 3);
+        
+        if (PrintLogs)
         Debug.LogError("Total Overlap: " + hits.Length);
 
         foreach (var hit in hits)
@@ -43,6 +46,7 @@ public partial class KillPlayerAction : Action
             float yDiff = Mathf.Abs(candidate.transform.position.y - origin.y);
             if (yDiff > yTolerance)
             {
+                if (PrintLogs)
                 Debug.Log($"Rejected {candidate.name} due to Y difference: {yDiff}");
                 continue;
             }
@@ -68,6 +72,7 @@ public partial class KillPlayerAction : Action
             }*/
             CustTransformUtils.FaceTarget(Self.Value.transform, closestTarget.transform);
             
+            if (PrintLogs)
             Debug.LogError("Kill You: " + closestTarget.name);
             closestTarget.GetComponent<ICanBeKilled>()?.OnKilled();
             Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Stab);

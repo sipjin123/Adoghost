@@ -7,7 +7,7 @@ using Unity.Properties;
 namespace Unity.Behavior
 {
     [Serializable, GeneratePropertyBag]
-    [NodeDescription(name: "IfIsCorpseNearby", story: "IfIsCorpseNearby: [Self] [Radius] [PlayerTag] [TargetRef] [HeightTolerance]", category: "Flow",
+    [NodeDescription(name: "IfIsCorpseNearby", story: "IfIsCorpseNearby: [Self] [Radius] [PlayerTag] [TargetRef] [HeightTolerance] [PrintLogs]", category: "Flow",
         id: "ab65ffb0298a80349dc25d9c5cb0477f")]
     public partial class IfIsCorpseNearbyModifier : Action
     {
@@ -16,6 +16,7 @@ namespace Unity.Behavior
         [SerializeReference] public BlackboardVariable<string> PlayerTag;
         [SerializeReference] public BlackboardVariable<float> Radius;
         [SerializeReference] public BlackboardVariable<float> HeightTolerance;
+        [SerializeReference] public BlackboardVariable<bool> PrintLogs = new BlackboardVariable<bool>(true);
 
         protected override Status OnStart()
         {
@@ -38,6 +39,7 @@ namespace Unity.Behavior
                 float yDiff = Mathf.Abs(hit.transform.position.y - pos.y);
                 if (yDiff > yTolerance)
                 {
+                    if (PrintLogs)
                     Debug.Log($"Rejected {hit.name} due to Y difference: {yDiff}");
                     continue;
                 }
@@ -47,6 +49,7 @@ namespace Unity.Behavior
                     continue;
 
                 TargetRef.Value = hit.gameObject;
+                if (PrintLogs)
                 Debug.LogError("Has Found Corpse Nearby: " + hit.gameObject.name);
                 return Status.Success;
             }

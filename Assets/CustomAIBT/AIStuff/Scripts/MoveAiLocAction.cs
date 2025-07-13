@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using Debug = UnityEngine.Debug;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent] Targ:[Target]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
+[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent] Targ:[Target] [ToWhere] [PrintLogs]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
 public partial class MoveAiLocAction : Action
 {
     private NavMeshAgent agent;
@@ -16,7 +16,9 @@ public partial class MoveAiLocAction : Action
     [SerializeReference] public BlackboardVariable<Transform> Target;
     [SerializeReference] public BlackboardVariable<AIBehaviorState> State;
 
+    [SerializeReference] public BlackboardVariable<bool> PrintLogs = new BlackboardVariable<bool>(true);
     private const float StopThreshold = 1.0f;
+    [SerializeReference] public BlackboardVariable<string> ToWhere;
 
     protected override Status OnStart()
     {
@@ -26,7 +28,8 @@ public partial class MoveAiLocAction : Action
         {
             agent.isStopped = false;
             agent.SetDestination(Target.Value.position);
-            Debug.Log("MoveAiLocAction: Moving to Target");
+            if (PrintLogs)
+            Debug.Log("MoveAiLocAction: Moving to Target: [" + ToWhere + "]");
             return Status.Running;
         }
 
@@ -42,6 +45,7 @@ public partial class MoveAiLocAction : Action
             if (agent != null)
                 agent.isStopped = true;
 
+            if (PrintLogs)
             Debug.Log("MoveAiLocAction: Aborted due to Retreating");
             return Status.Failure;
         }
@@ -55,6 +59,7 @@ public partial class MoveAiLocAction : Action
             }
             else
             {
+                Debug.Log("MoveAiLocAction: Failed to move: " + ToWhere);
                 return Status.Failure;
             }
         }
@@ -62,6 +67,7 @@ public partial class MoveAiLocAction : Action
         // Check if agent reached destination
         if (agent.remainingDistance <= StopThreshold && !agent.pathPending)
         {
+            if (PrintLogs)
             Debug.Log("MoveAiLocAction: Finished!");
             return Status.Success;
         }
@@ -71,6 +77,8 @@ public partial class MoveAiLocAction : Action
 
     protected override void OnEnd()
     {
+        if (PrintLogs)
+        Debug.Log("MoveAiLocAction: EndMove: " + ToWhere);
         // Optional: stop agent when task ends (cleanup)
         if (agent != null)
             agent.isStopped = true;
