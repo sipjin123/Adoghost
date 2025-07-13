@@ -74,7 +74,15 @@ public partial class KillPlayerAction : Action
             
             if (PrintLogs)
             Debug.LogError("Kill You: " + closestTarget.name);
-            closestTarget.GetComponent<ICanBeKilled>()?.OnKilled();
+            if (Self.Value.GetComponent<GhostAI>())
+            {
+                closestTarget.GetComponent<ICanBeKilled>()?.OnKilledAsGhost();
+            }
+            else
+            {
+                closestTarget.GetComponent<ICanBeKilled>()?.OnKilled();
+            }
+
             Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Stab);
             PlayerList.Value.Add(closestTarget);
             return Status.Success;

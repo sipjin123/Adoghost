@@ -23,22 +23,22 @@ namespace Unity.Behavior
                 return Status.Failure;
             }
 
-            CareTakerAI ai = self.GetComponent<CareTakerAI>();
-
-            if (ai == null)
+            if (GhostManager.Instance == null)
             {
-                Debug.LogWarning("CheckIsGhostTime: CareTakerAI component not found.");
+                Debug.LogWarning("CheckIsGhostTime: GhostManager is not available.");
                 return Status.Failure;
             }
 
-            if (!ai.IsGhostTime)
+            if (!GhostManager.Instance.IsGhostTime)
             {
-                Debug.Log("CheckIsGhostTime: IsGhostTime is false.");
+                if (PrintLogs)
+                    Debug.Log("CheckIsGhostTime: GhostManager says it's NOT ghost time.");
                 return Status.Failure;
             }
 
             if (PrintLogs)
-            Debug.Log("CheckIsGhostTime: IsGhostTime is true.");
+                Debug.Log("CheckIsGhostTime: GhostManager says it's ghost time.");
+    
             return Status.Success;
         }
     }

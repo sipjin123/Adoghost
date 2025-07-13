@@ -11,7 +11,7 @@ public interface ICanBeKilled
     /// Optional: Called when the unit is marked as killed.
     /// </summary>
     void OnKilled();
-    
+    void OnKilledAsGhost();
     
     void OnCarryCorpse(GameObject carrier);
     bool IsCorpseCarried();
