@@ -12,4 +12,8 @@ public class CareTakerAI : MonoBehaviour
 
     [SerializeField]
     public GameObject CorpseZone;
+    [SerializeField]
+    public GameObject HidingSpot;
+
+    public bool IsGhostTime = false;
 }
