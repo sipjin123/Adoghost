@@ -31,6 +31,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         GetComponent<Renderer>().material = deadMaterial;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         health = 0;
+        ToggleControl(false);
     }
 
     public void OnKilledAsGhost()
@@ -40,6 +41,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         health = 0;   
         StartCoroutine(ReviveToLimbo());
+        ToggleControl(false);
     }
 
     IEnumerator ReviveToLimbo()
@@ -53,6 +55,19 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         isInLimbo = true;
         transform.position = Limbo.position + offset;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Land);
+        ToggleControl(true);
+    }
+
+    private void ToggleControl(bool IsOn)
+    {
+        if (IsOn)
+        {        
+            GetComponentInChildren<ChefPlayer>().enabled = true;
+        }
+        else
+        {
+            GetComponentInChildren<ChefPlayer>().enabled = false;
+        }
     }
 
     public void OnCarryCorpse(GameObject carrier)
