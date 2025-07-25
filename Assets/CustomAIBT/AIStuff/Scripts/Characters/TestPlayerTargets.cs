@@ -98,5 +98,13 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         transform.localScale = new Vector3(newScale, newScale, newScale);
         transform.SetParent(null);
         isCorpseWithinCorpseZone = true;
+
+        if (CareTakerAI.Instance && CareTakerAI.Instance.CorpseZone)
+        {
+            float DistanceBetweenCorpseZone =
+                Vector3.Distance(transform.position, CareTakerAI.Instance.CorpseZone.transform.position);
+            Debug.Log("Distance is: " + DistanceBetweenCorpseZone);
+            isCorpseWithinCorpseZone = DistanceBetweenCorpseZone < 3.0f;
+        }
     }
 }

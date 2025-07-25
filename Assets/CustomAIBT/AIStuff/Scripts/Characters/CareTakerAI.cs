@@ -1,3 +1,4 @@
+using System;
 using Unity.Behavior;
 using UnityEngine;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ public class CareTakerAI : MonoBehaviour
     [SerializeField]
     public AIBehaviorState RequiredState;
     [SerializeField] private AggroController aggroManager;
-    [SerializeField]
     public GameObject CorpseZone;
     [SerializeField]
     public GameObject HidingSpot;
@@ -24,7 +24,23 @@ public class CareTakerAI : MonoBehaviour
 
     public bool HasDetectedTarget;
     public GameObject TargetPlayer;
-    
+    public GameObject CarriedPlayer;
+
+    public static CareTakerAI Instance { get; private set; }
+
+    private void Awake()
+    {
+        // Enforce singleton pattern
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Update()
     {
         if (!HasDetectedTarget && TargetPlayer == null)
@@ -72,6 +88,22 @@ public class CareTakerAI : MonoBehaviour
         HasDetectedTarget = true;
         TargetPlayer = target;
         aggroManager.ShouldAbort = true;
+        ForceDropCorpse();
         // Call your custom logic here
+    }
+
+    public void ReleaseTarget()
+    {
+        HasDetectedTarget = false;
+        TargetPlayer = null;
+        aggroManager.ShouldAbort = true;
+    }
+
+    public void ForceDropCorpse()
+    {
+        if (CarriedPlayer)
+        {
+            CarriedPlayer.GetComponent<ICanBeKilled>().OnDropCorpse();
+        }
     }
 }

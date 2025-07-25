@@ -80,6 +80,12 @@ public partial class KillPlayerAction : Action
             }
             else
             {
+                CareTakerAI CTAI = Self.Value.GetComponent<CareTakerAI>();
+                if (CTAI)
+                {
+                    CTAI.ReleaseTarget();
+                }
+
                 closestTarget.GetComponent<ICanBeKilled>()?.OnKilled();
             }
 

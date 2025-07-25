@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using Debug = UnityEngine.Debug;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent] Targ:[Target] [ToWhere] [PrintLogs]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
+[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent] Targ:[Target] [ToWhere] [PrintLogs] [StopThreshold]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
 public partial class MoveAiLocAction : Action
 {
     private NavMeshAgent agent;
@@ -17,7 +17,7 @@ public partial class MoveAiLocAction : Action
     [SerializeReference] public BlackboardVariable<AIBehaviorState> State;
 
     [SerializeReference] public BlackboardVariable<bool> PrintLogs = new BlackboardVariable<bool>(true);
-    private const float StopThreshold = 1.0f;
+    [SerializeReference] public BlackboardVariable<float> StopThreshold = new BlackboardVariable<float>(1.0f);
     [SerializeReference] public BlackboardVariable<string> ToWhere;
 
     protected override Status OnStart()
@@ -26,6 +26,11 @@ public partial class MoveAiLocAction : Action
 
         if (agent != null && Target?.Value != null)
         {
+            if (Vector3.Distance(agent.transform.position, Target.Value.position) <= StopThreshold)
+            {
+                return Status.Failure;
+            }
+
             agent.isStopped = false;
             agent.SetDestination(Target.Value.position);
             if (PrintLogs)

@@ -33,7 +33,8 @@ public partial class CarryCorpseAction : Action
         foreach (var hit in hits)
         {
             GameObject candidate = hit.gameObject;
-            if (candidate == Self.Value || PlayerList.Value.Contains(candidate))
+            //|| PlayerList.Value.Contains(candidate)
+            if (candidate == Self.Value)
                 continue;
 
             ICanBeKilled killable = candidate.GetComponent<ICanBeKilled>();
@@ -64,7 +65,8 @@ public partial class CarryCorpseAction : Action
             closestTarget.GetComponent<ICanBeKilled>()?.OnCarryCorpse(Self);
             Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Interact);
             HasCorpse.Value = true;
-            PlayerList.Value.Add(closestTarget);
+            //PlayerList.Value.Add(closestTarget);
+            Self.Value.GetComponent<CareTakerAI>().CarriedPlayer = closestTarget;
             return Status.Success;
         }
 

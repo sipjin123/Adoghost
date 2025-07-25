@@ -19,6 +19,7 @@ public partial class DropCorpseAction : Action
         if (self == null || string.IsNullOrEmpty(TagValue))
             return Status.Failure;
 
+        /*
         GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag(TagValue);
         if (taggedObjects == null || taggedObjects.Length == 0)
             return Status.Failure;
@@ -47,10 +48,12 @@ public partial class DropCorpseAction : Action
 
         if (nearest == null)
             return Status.Failure;
-
+    
         Target.Value = nearest;
+        */
+        Self.Value.GetComponent<CareTakerAI>().CarriedPlayer.GetComponent<ICanBeKilled>().OnDropCorpse();
         Self.Value.GetComponent<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Land);
-        nearest.GetComponent<ICanBeKilled>().OnDropCorpse();
+        //nearest.GetComponent<ICanBeKilled>().OnDropCorpse();
         HasCorpse.Value = false;
         return Status.Success;
     }
