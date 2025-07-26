@@ -43,7 +43,7 @@ public class CareTakerAI : MonoBehaviour
 
     void Update()
     {
-        if (!HasDetectedTarget && TargetPlayer == null)
+        if (!HasDetectedTarget && TargetPlayer == null && !GhostManager.Instance.IsGhostTime)
         {
             ScanForTargets();
         }

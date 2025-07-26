@@ -60,13 +60,17 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
 
     private void ToggleControl(bool IsOn)
     {
-        if (IsOn)
-        {        
-            GetComponentInChildren<ChefPlayer>().enabled = true;
-        }
-        else
+        ChefPlayer chefRef = GetComponentInChildren<ChefPlayer>();
+        if (chefRef)
         {
-            GetComponentInChildren<ChefPlayer>().enabled = false;
+            if (IsOn)
+            {
+                chefRef.enabled = true;
+            }
+            else
+            {
+                chefRef.enabled = false;
+            }
         }
     }
 

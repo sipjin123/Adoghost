@@ -12,6 +12,7 @@ public class GhostManager : MonoBehaviour
     public event Action OnGhostTimeStarted;       // only fired when IsGhostTime becomes true
 
     public GhostAI GhostAI;
+    public CareTakerAI CareTakerAI;
     private void Awake()
     {
         // Enforce singleton pattern
@@ -29,7 +30,9 @@ public class GhostManager : MonoBehaviour
     public void SetGhostTime(bool active)
     {
         if (active)
-        {
+        {            
+            IsGhostTime = true;
+            CareTakerAI.GetComponent<AggroController>().ShouldAbort = true;
             StartCoroutine(ReviveToLimbo());
         }
         else
@@ -49,13 +52,12 @@ public class GhostManager : MonoBehaviour
         GhostAI.transform.position = GhostAI.SpawnSpot.position;
         GhostAI.gameObject.SetActive(true);
         
-        IsGhostTime = true;
         OnGhostTimeChanged?.Invoke(IsGhostTime);
     }
     
     private void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(10, 10, 200, 60));
+        GUILayout.BeginArea(new Rect(500, 10, 200, 60));
         GUILayout.BeginVertical("box");
 
         string label = IsGhostTime ? "Disable Ghost Time" : "Enable Ghost Time";
@@ -68,5 +70,4 @@ public class GhostManager : MonoBehaviour
         GUILayout.EndVertical();
         GUILayout.EndArea();
     }
-
 }

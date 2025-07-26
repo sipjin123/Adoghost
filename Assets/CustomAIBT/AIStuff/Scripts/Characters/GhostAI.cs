@@ -24,7 +24,6 @@ public class GhostAI : MonoBehaviour
 
     private void OnGhostTimeChanged(bool isActive)
     {
-        return;
         if (isActive)
         {
             agent.Warp(SpawnSpot.position);

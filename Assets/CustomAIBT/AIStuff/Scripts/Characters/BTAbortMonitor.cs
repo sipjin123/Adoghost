@@ -1,13 +1,14 @@
 using UnityEngine;
-using Unity.AI;
 using Unity.Behavior;
 
+// Bonta
+// This class is responsible for resetting the Behavior graph, normally used to abort existing action and process re prioritized branches
 public class BTAbortMonitor : MonoBehaviour
 {
     private BehaviorGraphAgent agent;
     private AggroController aggro;
 
-    void Start()
+    void Awake()
     {
         agent = GetComponent<BehaviorGraphAgent>();
         aggro = GetComponent<AggroController>();
@@ -22,7 +23,6 @@ public class BTAbortMonitor : MonoBehaviour
     {
         if (aggro != null && aggro.ShouldAbort)
         {
-            Debug.LogError("BehaviorGraphAgentABORTTTTTTTT!");
             aggro.ShouldAbort = false;
             agent?.Graph.End();
             agent?.Graph.Restart();

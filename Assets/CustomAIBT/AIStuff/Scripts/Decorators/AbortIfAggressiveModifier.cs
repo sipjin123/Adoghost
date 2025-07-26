@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Unity.Behavior
 {
     [Serializable, GeneratePropertyBag]
-    [NodeDescription(name: "AbortIfAggressive", story: "AbortIfAggressive [Self]", category: "Flow",
+    [NodeDescription(name: "AbortIfAggressive", story: "Abort If NOT Aggressive [Self]", category: "Flow",
         id: "eb3542480fce1299d5794d1fc257fc9d")]
     public partial class AbortIfAggressiveModifier : Composite
     {
