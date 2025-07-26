@@ -9,6 +9,10 @@ public class GhostAI : MonoBehaviour
     public Transform HidingSpot;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
+    [SerializeField] private AggroController aggroManager;
+    public bool HasDetectedTarget;
+    public GameObject TargetPlayer;
+    public VisionDetectorComp VisionDetectorComp;
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -19,7 +23,31 @@ public class GhostAI : MonoBehaviour
         if (GhostManager.Instance != null)
         {
             GhostManager.Instance.OnGhostTimeChanged += OnGhostTimeChanged;
+            VisionDetectorComp.OnGameObjectBroadcast += OnTargetSeen;
         }
+    }
+
+    void Update()
+    {
+        if (!HasDetectedTarget && TargetPlayer == null && GhostManager.Instance.IsGhostTime)
+        {
+            VisionDetectorComp.ScanForTargets();
+        }
+    }
+    
+    void OnTargetSeen(GameObject target)
+    {
+        Debug.Log("Ghost Target seen: " + target.name);
+        HasDetectedTarget = true;
+        TargetPlayer = target;
+        aggroManager.ShouldAbort = true;
+    }
+
+    public void ReleaseTarget()
+    {
+        HasDetectedTarget = false;
+        TargetPlayer = null;
+        aggroManager.ShouldAbort = true;
     }
 
     private void OnGhostTimeChanged(bool isActive)

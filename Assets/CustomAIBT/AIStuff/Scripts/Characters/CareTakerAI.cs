@@ -17,15 +17,10 @@ public class CareTakerAI : MonoBehaviour
 
     public bool IsGhostTime = false;
     
-    public float viewDistance = 10f;
-    public float viewAngle = 60f; // Total angle (degrees)
-    public int rayCount = 20;     // Number of rays in the fan
-    public LayerMask targetLayer;
-
     public bool HasDetectedTarget;
     public GameObject TargetPlayer;
     public GameObject CarriedPlayer;
-
+    public VisionDetectorComp VisionDetectorComp;
     public static CareTakerAI Instance { get; private set; }
 
     private void Awake()
@@ -41,44 +36,16 @@ public class CareTakerAI : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        VisionDetectorComp.OnGameObjectBroadcast += OnTargetSeen;
+    }
+
     void Update()
     {
         if (!HasDetectedTarget && TargetPlayer == null && !GhostManager.Instance.IsGhostTime)
         {
-            ScanForTargets();
-        }
-    }
-
-    void ScanForTargets()
-    {
-        float halfAngle = viewAngle / 2f;
-        float angleStep = viewAngle / (rayCount - 1);
-
-        for (int i = 0; i < rayCount; i++)
-        {
-            float angle = -halfAngle + (angleStep * i);
-            Quaternion rotation = Quaternion.AngleAxis(angle, transform.up);
-            Vector3 direction = rotation * transform.forward;
-
-            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, viewDistance, ~0))
-            {
-                if (hit.collider.CompareTag("Targets"))
-                {
-                    ICanBeKilled killable = hit.collider.gameObject.GetComponent<ICanBeKilled>();
-                    if (killable == null || !killable.CanBeKilled())
-                        continue;
-                    OnTargetSeen(hit.collider.gameObject);
-                    Debug.DrawRay(transform.position, direction * hit.distance, Color.green);
-                }
-                else
-                {
-                    Debug.DrawRay(transform.position, direction * hit.distance, Color.red);
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, direction * viewDistance, Color.gray);
-            }
+            VisionDetectorComp.ScanForTargets();
         }
     }
 
@@ -91,7 +58,7 @@ public class CareTakerAI : MonoBehaviour
         ForceDropCorpse();
         // Call your custom logic here
     }
-
+    
     public void ReleaseTarget()
     {
         HasDetectedTarget = false;

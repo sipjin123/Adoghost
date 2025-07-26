@@ -74,8 +74,11 @@ public partial class KillPlayerAction : Action
             
             if (PrintLogs)
             Debug.LogError("Kill You: " + closestTarget.name);
-            if (Self.Value.GetComponent<GhostAI>())
+            
+            GhostAI GHAI = Self.Value.GetComponent<GhostAI>();
+            if (GHAI)
             {
+                GHAI.ReleaseTarget();
                 closestTarget.GetComponent<ICanBeKilled>()?.OnKilledAsGhost();
             }
             else
@@ -85,7 +88,6 @@ public partial class KillPlayerAction : Action
                 {
                     CTAI.ReleaseTarget();
                 }
-
                 closestTarget.GetComponent<ICanBeKilled>()?.OnKilled();
             }
 
