@@ -32,7 +32,7 @@ public class ChefPlayer : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
+        //HandleMovement();
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             CrockPot nearestPot = FindNearestCrockPot();

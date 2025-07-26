@@ -37,7 +37,7 @@ public class GhostAI : MonoBehaviour
     
     void OnTargetSeen(GameObject target)
     {
-        Debug.Log("Ghost Target seen: " + target.name);
+        Debug.Log("Ghost Target seen: " + target.name + " " + target.GetComponent<TestPlayerTargets>().health);
         HasDetectedTarget = true;
         TargetPlayer = target;
         aggroManager.ShouldAbort = true;

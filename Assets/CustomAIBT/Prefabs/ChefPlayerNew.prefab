@@ -197,6 +197,7 @@ MonoBehaviour:
   isCorpseWithinCorpseZone: 0
   Limbo: {fileID: 0}
   isInLimbo: 0
+  MeshRender: {fileID: 2265370914207757406}
 --- !u!1 &6691010298595563383
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +391,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1e8e1bfafe7fa241ba6b4181f3eba85, type: 3}
+--- !u!137 &2265370914207757406 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2775862123970177323, guid: f1e8e1bfafe7fa241ba6b4181f3eba85, type: 3}
+  m_PrefabInstance: {fileID: 4176491881924844917}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4503415186103974558 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f1e8e1bfafe7fa241ba6b4181f3eba85, type: 3}

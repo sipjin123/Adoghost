@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using AdoboHorror.Game.Network;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
@@ -15,9 +17,12 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     public bool isCorpseWithinCorpseZone;
     public Transform Limbo;
     public bool isInLimbo;
+    public Renderer MeshRender;
+    public Transform ParentTransformer;
+    [SerializeField] private float smoothSpeed = 5f;
     private void Start()
     {
-        aliveMaterial = GetComponent<Renderer>().material;
+        aliveMaterial = MeshRender.material;
     }
 
     public bool CanBeKilled()
@@ -28,7 +33,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     public void OnKilled()
     {
         Debug.Log($"{gameObject.name} has been killed!");
-        GetComponent<Renderer>().material = deadMaterial;
+        MeshRender.material = deadMaterial;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         health = 0;
         ToggleControl(false);
@@ -37,9 +42,9 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     public void OnKilledAsGhost()
     {
         Debug.Log($"{gameObject.name} has been killed!");
-        GetComponent<Renderer>().material = deadMaterial;
+        MeshRender.material = deadMaterial;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
-        health = 0;   
+        health = 0;
         StartCoroutine(ReviveToLimbo());
         ToggleControl(false);
     }
@@ -56,6 +61,23 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         transform.position = Limbo.position + offset;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Land);
         ToggleControl(true);
+    }
+
+    private void Update()
+    {
+        if (ParentTransformer)
+        {       transform.position = Vector3.Lerp(
+                transform.position,
+                ParentTransformer.transform.position,
+                Time.deltaTime * smoothSpeed
+            );
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            var NewLoc = new Vector3(1f, 1.3f, 10f);
+            GetComponent<AvatarNetwork>().RequestTeleport(NewLoc);
+        }
     }
 
     private void ToggleControl(bool IsOn)
@@ -77,10 +99,13 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
     public void OnCarryCorpse(GameObject carrier)
     {
         float newScale = .25f;
-        GetComponent<Renderer>().material = carryMaterial;
+        MeshRender.material = carryMaterial;
         transform.localScale = new Vector3(newScale, newScale, newScale);
-        transform.SetParent(carrier.transform);
+        //transform.SetParent(carrier.transform);
+        ParentTransformer = carrier.transform;
         corpseCarried = true;
+        GetComponent<CapsuleCollider>().enabled = false;
+        GetComponent<NavMeshAgent>().enabled = false;
     }
 
     public bool IsCorpseCarried()
@@ -95,10 +120,13 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
 
     public void OnDropCorpse()
     {
+        GetComponent<CapsuleCollider>().enabled = true;
+        GetComponent<NavMeshAgent>().enabled = true;
+        ParentTransformer = null;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         corpseCarried = false;
         float newScale = 1;
-        GetComponent<Renderer>().material = health > 0 ? aliveMaterial : deadMaterial;
+        MeshRender.material = health > 0 ? aliveMaterial : deadMaterial;
         transform.localScale = new Vector3(newScale, newScale, newScale);
         transform.SetParent(null);
         isCorpseWithinCorpseZone = true;

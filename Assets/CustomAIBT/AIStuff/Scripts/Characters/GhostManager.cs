@@ -50,9 +50,9 @@ public class GhostManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         
         GhostAI.transform.position = GhostAI.SpawnSpot.position;
-        GhostAI.gameObject.SetActive(true);
-        
         OnGhostTimeChanged?.Invoke(IsGhostTime);
+        GhostAI.ReleaseTarget();
+        GhostAI.gameObject.SetActive(true);
     }
     
     private void OnGUI()
