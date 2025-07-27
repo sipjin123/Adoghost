@@ -13,6 +13,8 @@ public class GhostManager : MonoBehaviour
 
     public GhostAI GhostAI;
     public CareTakerAI CareTakerAI;
+
+    public AIBehaviorState CaretakerBehaviorState;
     private void Awake()
     {
         // Enforce singleton pattern

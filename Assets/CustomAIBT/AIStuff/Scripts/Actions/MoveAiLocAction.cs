@@ -7,14 +7,13 @@ using UnityEngine.AI;
 using Debug = UnityEngine.Debug;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: State: [State] Self: [NAgent] Targ:[Target] [ToWhere] [PrintLogs] [StopThreshold]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
+[NodeDescription(name: "MoveAiLoc", story: "MoveTheAITo: Self: [NAgent] Targ:[Target] [ToWhere] [PrintLogs] [StopThreshold]", category: "Action", id: "3e186534b0de9943e24c778e104a8650")]
 public partial class MoveAiLocAction : Action
 {
     private NavMeshAgent agent;
 
     [SerializeReference] public BlackboardVariable<GameObject> NAgent;
     [SerializeReference] public BlackboardVariable<Transform> Target;
-    [SerializeReference] public BlackboardVariable<AIBehaviorState> State;
 
     [SerializeReference] public BlackboardVariable<bool> PrintLogs = new BlackboardVariable<bool>(true);
     [SerializeReference] public BlackboardVariable<float> StopThreshold = new BlackboardVariable<float>(1.0f);
@@ -45,7 +44,7 @@ public partial class MoveAiLocAction : Action
     protected override Status OnUpdate()
     {
         // Abort if state becomes Retreating
-        if (State != null && State.Value == AIBehaviorState.Retreating)
+        if (GhostManager.Instance != null && GhostManager.Instance.CaretakerBehaviorState == AIBehaviorState.Retreating)
         {
             if (agent != null)
                 agent.isStopped = true;

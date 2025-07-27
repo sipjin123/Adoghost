@@ -76,6 +76,7 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         if (Input.GetKeyDown(KeyCode.V))
         {
             var NewLoc = new Vector3(1f, 1.3f, 10f);
+            if (GetComponent<AvatarNetwork>())
             GetComponent<AvatarNetwork>().RequestTeleport(NewLoc);
         }
     }
@@ -104,8 +105,12 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
         //transform.SetParent(carrier.transform);
         ParentTransformer = carrier.transform;
         corpseCarried = true;
-        GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<NavMeshAgent>().enabled = false;
+        CapsuleCollider newCol = GetComponent<CapsuleCollider>();
+        NavMeshAgent NavAgent = GetComponent<NavMeshAgent>();
+        if (newCol)
+            newCol.enabled = false;
+        if (NavAgent)
+            NavAgent.enabled = false;
     }
 
     public bool IsCorpseCarried()
@@ -120,8 +125,13 @@ public class TestPlayerTargets : MonoBehaviour, ICanBeKilled
 
     public void OnDropCorpse()
     {
-        GetComponent<CapsuleCollider>().enabled = true;
-        GetComponent<NavMeshAgent>().enabled = true;
+        NavMeshAgent NavAgent = GetComponent<NavMeshAgent>();
+        CapsuleCollider newCol = GetComponent<CapsuleCollider>();
+        if (NavAgent)
+            NavAgent.enabled = true;
+        if (newCol)
+            newCol.enabled = true;
+        
         ParentTransformer = null;
         GetComponentInChildren<CTAnimPlayer>().PlayAnimation(CTAnimPlayer.CharacterAnimation.Death);
         corpseCarried = false;

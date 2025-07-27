@@ -5,15 +5,12 @@ using UnityEngine;
 namespace Unity.Behavior
 {
     [Serializable, GeneratePropertyBag]
-    [NodeDescription(name: "AbortIfStateIsEscape", story: "AbortIfStateIsEscape [State]", category: "Flow",
+    [NodeDescription(name: "AbortIfStateIsEscape", story: "AbortIfStateIsEscape", category: "Flow",
         id: "c72930fea3e6d4e6ccaab646eff1c6b2")]
     internal partial class EscapeAbortSelectorComposite : Composite
     {  
         [CreateProperty] private int m_CurrentChild;
         [NonSerialized] private bool m_Aborted;
-
-        [SerializeReference]
-        public BlackboardVariable<AIBehaviorState> State;
 
         protected override Status OnStart()
         {
@@ -44,7 +41,7 @@ namespace Unity.Behavior
 
         private bool ShouldAbort()
         {
-            return State != null && State.Value == AIBehaviorState.Retreating;
+            return GhostManager.Instance != null && GhostManager.Instance.CaretakerBehaviorState == AIBehaviorState.Retreating;
         }
 
         protected void OnReset()

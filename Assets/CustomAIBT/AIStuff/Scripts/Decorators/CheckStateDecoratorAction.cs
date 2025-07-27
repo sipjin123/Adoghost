@@ -11,6 +11,5 @@ namespace Unity.Behavior
         id: "3cfd324e58affbba5f73c7842ef4b0d1")]
     public partial class CheckStateDecoratorAction : Composite
     {
-        [SerializeField] public AIBehaviorState RequiredState;
     }
 }

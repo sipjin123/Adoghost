@@ -5,4 +5,5 @@
 public class AggroController : MonoBehaviour
 {
     public bool ShouldAbort = false;
+    public AIBehaviorState BehaviorState;
 }

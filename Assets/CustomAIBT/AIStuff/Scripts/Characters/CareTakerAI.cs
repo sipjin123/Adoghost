@@ -7,9 +7,6 @@ using Unity.Properties;
 
 public class CareTakerAI : MonoBehaviour
 {    
-    
-    [SerializeField]
-    public AIBehaviorState RequiredState;
     [SerializeField] private AggroController aggroManager;
     public GameObject CorpseZone;
     [SerializeField]
