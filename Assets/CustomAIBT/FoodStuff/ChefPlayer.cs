@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,30 @@ public class ChefPlayer : MonoBehaviour
         }
     }
 
+    private FoodPickup HoveredFood;
+    public float rayDistance = 5f; // How far the ray goes
+    void DetectFood()
+    {
+        Camera cam = Camera.main; // Get the main camera
+
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, rayDistance))
+        {
+            // Try to get the FoodPickup component from the hit object
+            FoodPickup food = hit.collider.GetComponent<FoodPickup>();
+            HoveredFood = food;
+            {
+                //Debug.Log("Hit something, but it's not food");
+            }
+        }
+        else
+        {
+            //Debug.Log("No object hit");
+        }
+    }
+
     void Update()
     {
         //HandleMovement();
@@ -54,10 +79,27 @@ public class ChefPlayer : MonoBehaviour
                 nearestPot.DecreaseHeat();
         }
 
-        
+        DetectFood();
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TryPickupNearestFood();
+            //TryPickupNearestFood();
+            
+            
+            if (HoveredFood != null)
+            {
+                Debug.Log("Pickup food: " + HoveredFood.foodName);
+                // You can call a function on FoodPickup here, e.g.
+                // food.PickUp();
+                
+                if (HoveredFood != null)
+                {
+                    var newItem = new FoodItem(HoveredFood.foodName, HoveredFood.stats);
+                    collectedFoods.Add(newItem);
+                    Destroy(HoveredFood.gameObject);
+                    Debug.Log($"Picked up and destroyed: {newItem.name}");
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -78,6 +120,7 @@ public class ChefPlayer : MonoBehaviour
             CrockPot nearestPot = FindNearestCrockPot();
             if (nearestPot != null)
             {
+                Debug.Log("Added food to crock pot nearby.");
                 TryAddToPot(nearestPot);
             }
             else
@@ -129,10 +172,12 @@ public class ChefPlayer : MonoBehaviour
 
     CrockPot FindNearestCrockPot()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, crockPotLayer);
+        //Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, crockPotLayer);
+        Collider[] hits = Physics.OverlapSphere(transform.position, 5, LayerMask.GetMask("Default"));
         float closestDist = float.MaxValue;
         CrockPot nearest = null;
 
+        Debug.Log("Hit radius: " +hits.Length);
         foreach (var hit in hits)
         {
             CrockPot pot = hit.GetComponent<CrockPot>();
@@ -182,5 +227,22 @@ public class ChefPlayer : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickupRadius);
+    }
+
+    private void OnGUI()
+    {
+        if (HoveredFood)
+        {
+            // Create centered style
+            GUIStyle style = new GUIStyle(GUI.skin.label);
+            style.alignment = TextAnchor.MiddleCenter;
+            style.fontSize = 24;
+            style.normal.textColor = Color.white;
+
+            // Draw label in middle of screen
+            float width = Screen.width;
+            float height = Screen.height;
+            GUI.Label(new Rect(0, height / 2 - 12, width, 25), "Press E to Pick Up", style);
+        }
     }
 }
